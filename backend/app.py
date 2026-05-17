@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for
 from flask_cors import CORS
 from routes.chat import chat_bp
 from routes.history import history_bp
-import os
+
 
 def create_app():
     app = Flask(
@@ -26,6 +26,6 @@ def create_app():
     return app
 
 if __name__ == "__main__":
-    app = create_app()   
+    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host="0.0.0.0", port=port)
