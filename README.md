@@ -103,6 +103,7 @@ This installs Flask, flask-cors, anthropic SDK, and python-dotenv.
 ANTHROPIC_API_KEY=sk-ant-api03-xxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
+> Get your key at: https://console.anthropic.com/
 
 ---
 
