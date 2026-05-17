@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EchoBot — Sign In</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/svg+xml" href="/static/img/favicon.svg"/>
+  <link rel="stylesheet" href="/static/css/login.css"/>
+</head>
+<body>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="login-wrap">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="28" height="28" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 18a6 6 0 016-6h28a6 6 0 016 6v18a6 6 0 01-6 6H36l-8 8v-8h-10a6 6 0 01-6-6V18z" fill="currentColor"/>
+          <circle cx="24" cy="27" r="3" fill="#0c0c0f"/>
+          <circle cx="32" cy="27" r="3" fill="#0c0c0f"/>
+          <circle cx="40" cy="27" r="3" fill="#0c0c0f"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">EchoBot</span>
+        <span class="brand-tagline">intelligent chat</span>
+      </div>
+    </div>
+
+    <div class="card" id="card">
+      <div class="tabs">
+        <button class="tab active" id="tabSignin" onclick="switchTab('signin')">Sign In</button>
+        <button class="tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
+        <div class="tab-indicator" id="tabIndicator"></div>
+      </div>
+
+      <div class="alert" id="alert" style="display:none"></div>
+
+      <!-- SIGN IN -->
+      <form class="auth-form" id="signinForm" onsubmit="handleSignin(event)">
+        <div class="field">
+          <label>Email</label>
+          <div class="input-wrap">
+            <svg class="input-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+            <input type="email" id="siEmail" placeholder="you@example.com" required autocomplete="email"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap">
+            <svg class="input-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            <input type="password" id="siPassword" placeholder="••••••••" required autocomplete="current-password"/>
+            <button type="button" class="eye-btn" onclick="togglePwd('siPassword',this)">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="field-row">
+          <label class="checkbox-label"><input type="checkbox" id="rememberMe"/> Remember me</label>
+          <a href="#" class="forgot-link" onclick="showForgot()">Forgot password?</a>
+        </div>
+        <button type="submit" class="submit-btn" id="siBtn">
+          <span>Sign In</span>
+          <div class="btn-spinner" id="siSpinner" style="display:none"></div>
+        </button>
+      </form>
+
+      <!-- SIGN UP -->
+      <form class="auth-form" id="signupForm" style="display:none" onsubmit="handleSignup(event)">
+        <div class="field">
+          <label>Full Name</label>
+          <div class="input-wrap">
+            <svg class="input-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="suName" placeholder="John Doe" required autocomplete="name"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <div class="input-wrap">
+            <svg class="input-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+            <input type="email" id="suEmail" placeholder="you@example.com" required autocomplete="email"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap">
+            <svg class="input-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            <input type="password" id="suPassword" placeholder="Min. 6 characters" required autocomplete="new-password"/>
+            <button type="button" class="eye-btn" onclick="togglePwd('suPassword',this)">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="password-strength" id="pwStrength">
+            <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+            <span id="strengthLabel"></span>
+          </div>
+        </div>
+        <button type="submit" class="submit-btn" id="suBtn">
+          <span>Create Account</span>
+          <div class="btn-spinner" id="suSpinner" style="display:none"></div>
+        </button>
+        <p class="terms">By signing up you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a>.</p>
+      </form>
+
+      <div class="divider"><span>or continue with</span></div>
+      <div class="social-row">
+        <button class="social-btn" onclick="socialLogin('Google')">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.14 0 5.95 1.08 8.17 2.85L38.4 6.1A23.94 23.94 0 0024 0C14.82 0 6.96 5.4 3.16 13.26l7.4 5.75C12.43 13.09 17.76 9.5 24 9.5z"/><path fill="#4285F4" d="M46.67 24.5c0-1.62-.15-3.2-.42-4.72H24v8.94h12.73c-.55 2.97-2.22 5.48-4.73 7.17l7.27 5.65C43.47 37.6 46.67 31.55 46.67 24.5z"/><path fill="#FBBC05" d="M10.56 28.99A14.52 14.52 0 019.5 24c0-1.74.3-3.42.84-4.99l-7.4-5.75A23.93 23.93 0 000 24c0 3.87.93 7.53 2.57 10.76l8-5.77z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.14 15.9-5.84l-7.27-5.65c-2.14 1.44-4.88 2.29-8.63 2.29-6.24 0-11.57-3.59-13.44-8.81l-8 5.77C6.96 42.6 14.82 48 24 48z"/></svg>
+          Google
+        </button>
+        <button class="social-btn" onclick="socialLogin('GitHub')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.4.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </button>
+      </div>
+    </div>
+
+    <p class="footer-note">2025 EchoBot · Powered by Groq AI</p>
+  </div>
+
+<script>
+  if (sessionStorage.getItem('echobot_user')) window.location.href = '/';
+  const saved = localStorage.getItem('echobot_user');
+  if (saved) { sessionStorage.setItem('echobot_user', saved); window.location.href = '/'; }
+
+  function switchTab(tab) {
+    const si = tab === 'signin';
+    document.getElementById('tabSignin').classList.toggle('active', si);
+    document.getElementById('tabSignup').classList.toggle('active', !si);
+    document.getElementById('signinForm').style.display  = si ? '' : 'none';
+    document.getElementById('signupForm').style.display  = si ? 'none' : '';
+    document.getElementById('tabIndicator').style.transform = si ? 'translateX(0)' : 'translateX(100%)';
+    hideAlert();
+  }
+
+  function togglePwd(id, btn) {
+    const inp = document.getElementById(id);
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    btn.style.opacity = inp.type === 'text' ? '1' : '.5';
+  }
+
+  document.getElementById('suPassword').addEventListener('input', function() {
+    const v = this.value; let score = 0;
+    if (v.length >= 6) score++; if (v.length >= 10) score++;
+    if (/[A-Z]/.test(v)) score++; if (/[0-9]/.test(v)) score++; if (/[^A-Za-z0-9]/.test(v)) score++;
+    const labels = ['','Weak','Fair','Good','Strong','Very Strong'];
+    const colors = ['','#e07070','#e0a870','#e0d870','#7ec87e','#4caf7d'];
+    const fill = document.getElementById('strengthFill');
+    fill.style.width = (score/5*100)+'%'; fill.style.background = colors[score]||'';
+    const lbl = document.getElementById('strengthLabel');
+    lbl.textContent = labels[score]||''; lbl.style.color = colors[score]||'';
+  });
+
+  function showAlert(msg, type='error') {
+    const el = document.getElementById('alert');
+    el.textContent = msg; el.className = 'alert '+type; el.style.display='';
+  }
+  function hideAlert() { document.getElementById('alert').style.display='none'; }
+
+  function handleSignin(e) {
+    e.preventDefault();
+    const email = document.getElementById('siEmail').value.trim();
+    const password = document.getElementById('siPassword').value;
+    const remember = document.getElementById('rememberMe').checked;
+    setLoading('si', true); hideAlert();
+    setTimeout(() => {
+      const users = JSON.parse(localStorage.getItem('echobot_users')||'[]');
+      const user = users.find(u => u.email===email && u.password===btoa(password));
+      if (!user) { showAlert('Invalid email or password.'); setLoading('si',false); return; }
+      const session = {name:user.name, email:user.email};
+      sessionStorage.setItem('echobot_user', JSON.stringify(session));
+      if (remember) localStorage.setItem('echobot_user', JSON.stringify(session));
+      showAlert('Welcome back, '+user.name+'! Redirecting…','success');
+      setTimeout(() => window.location.href='/', 900);
+    }, 700);
+  }
+
+  function handleSignup(e) {
+    e.preventDefault();
+    const name = document.getElementById('suName').value.trim();
+    const email = document.getElementById('suEmail').value.trim();
+    const password = document.getElementById('suPassword').value;
+    if (password.length < 6) { showAlert('Password must be at least 6 characters.'); return; }
+    setLoading('su', true); hideAlert();
+    setTimeout(() => {
+      const users = JSON.parse(localStorage.getItem('echobot_users')||'[]');
+      if (users.find(u => u.email===email)) { showAlert('Email already registered.'); setLoading('su',false); return; }
+      users.push({name, email, password: btoa(password)});
+      localStorage.setItem('echobot_users', JSON.stringify(users));
+      const session = {name, email};
+      sessionStorage.setItem('echobot_user', JSON.stringify(session));
+      showAlert('Account created! Welcome, '+name+'!','success');
+      setTimeout(() => window.location.href='/', 900);
+    }, 700);
+  }
+
+  function socialLogin(provider) {
+    const session = {name: provider+' User', email: provider.toLowerCase()+'@demo.com'};
+    sessionStorage.setItem('echobot_user', JSON.stringify(session));
+    window.location.href='/';
+  }
+
+  function showForgot() { showAlert('Password reset link sent! (demo)','success'); }
+
+  function setLoading(prefix, on) {
+    document.getElementById(prefix+'Btn').disabled = on;
+    document.getElementById(prefix+'Spinner').style.display = on ? '' : 'none';
+    document.querySelector('#'+prefix+'Btn span').style.opacity = on ? '0' : '1';
+  }
+</script>
+</body>
+</html>

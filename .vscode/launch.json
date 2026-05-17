@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Flask (Aura)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/app.py",
+      "env": {
+        "FLASK_DEBUG": "1",
+        "FLASK_APP": "app.py"
+      },
+      "jinja": true,
+      "justMyCode": true
+    }
+  ]
+}

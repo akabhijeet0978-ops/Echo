@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EchoBot — AI Chat</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/svg+xml" href="/static/img/favicon.svg"/>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">EchoBot <span>intelligent chat</span></div>
+    <button class="new-chat-btn" id="newChatBtn">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      New conversation
+    </button>
+    <div class="history-label">Recent</div>
+    <div class="history-list" id="historyList">
+      <div class="history-empty">No conversations yet</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="model-badge">
+        <div class="model-dot"></div>
+        Groq · Llama 3.3 70B
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-btn" id="menuBtn">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <div class="topbar-title" id="chatTitle">New Chat</div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="themeBtn" title="Toggle theme">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <button class="icon-btn" id="clearBtn" title="Clear chat">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+        </button>
+        <!-- User avatar + dropdown -->
+        <div class="user-menu-wrap" id="userMenuWrap">
+          <button class="user-avatar-btn" id="userAvatarBtn" title="Account">
+            <div class="user-avatar" id="userAvatar">U</div>
+          </button>
+          <div class="user-dropdown" id="userDropdown">
+            <div class="user-dropdown-info">
+              <div class="user-dropdown-name" id="dropdownName">Guest</div>
+              <div class="user-dropdown-email" id="dropdownEmail">Not signed in</div>
+            </div>
+            <div class="user-dropdown-divider"></div>
+            <button class="user-dropdown-item" id="logoutBtn">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+              Sign out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="messages" id="messages">
+      <div class="welcome" id="welcome">
+        <div class="welcome-icon">✦</div>
+        <h1>Ask me anything</h1>
+        <p>I'm EchoBot, your intelligent AI companion. I can write, code, analyse, translate, and think through complex problems with you.</p>
+        <div class="suggestions" id="suggestions">
+          <div class="suggestion-chip" data-prompt="Explain quantum entanglement simply">Explain quantum entanglement simply</div>
+          <div class="suggestion-chip" data-prompt="Write a Python web scraper">Write a Python web scraper</div>
+          <div class="suggestion-chip" data-prompt="Draft a professional email">Draft a professional email</div>
+          <div class="suggestion-chip" data-prompt="Give me a creative story idea">Give me a creative story idea</div>
+          <div class="suggestion-chip" data-prompt="Explain Big O notation">Explain Big O notation</div>
+          <div class="suggestion-chip" data-prompt="Translate Hello World to French">Translate to French</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="input-wrap" id="inputWrap">
+        <textarea id="userInput" placeholder="Message EchoBot…" rows="1"></textarea>
+        <div class="input-actions">
+          <button class="icon-btn attach-btn" title="Attach (coming soon)" id="attachBtn">
+            <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+          </button>
+          <button id="sendBtn" disabled>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="input-hint">EchoBot can make mistakes — verify important information · Powered by Groq AI</div>
+    </div>
+  </main>
+</div>
+
+<script src="/static/js/api.js"></script>
+<script src="/static/js/ui.js"></script>
+<script src="/static/js/app.js"></script>
+<script>
+  // ── Auth guard ──
+  (function() {
+    const user = sessionStorage.getItem('echobot_user');
+    if (!user) { window.location.href = '/login'; return; }
+    const { name, email } = JSON.parse(user);
+    const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    document.getElementById('userAvatar').textContent   = initials;
+    document.getElementById('dropdownName').textContent  = name;
+    document.getElementById('dropdownEmail').textContent = email || 'Guest session';
+  })();
+
+  // ── User dropdown ──
+  const avatarBtn = document.getElementById('userAvatarBtn');
+  const dropdown  = document.getElementById('userDropdown');
+  avatarBtn.addEventListener('click', e => { e.stopPropagation(); dropdown.classList.toggle('open'); });
+  document.addEventListener('click', () => dropdown.classList.remove('open'));
+
+  // ── Logout ──
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    sessionStorage.removeItem('echobot_user');
+    localStorage.removeItem('echobot_user');
+    window.location.href = '/login';
+  });
+
+  // ── Theme persist ──
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light');
+    localStorage.setItem('echobot_theme', isLight ? 'light' : 'dark');
+  });
+  if (localStorage.getItem('echobot_theme') === 'light') document.body.classList.add('light');
+</script>
+</body>
+</html>
